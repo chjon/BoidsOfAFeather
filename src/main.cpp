@@ -30,11 +30,10 @@ int main() {
         // Update boids
         if (timer.getElapsedTime() >= delay) {
             window.clear();
-
             world.update();
             world.draw(window);
-
             window.display();
+
             timer.restart();
         }
     }

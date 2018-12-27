@@ -5,11 +5,11 @@
 
 class Boid {
 private:
+    const float RADIUS = 5;
+
     sf::Vector2f pos;
     sf::Vector2f vel;
     sf::Vector2f acc;
-
-    float radius = 10;
 
 public:
     Boid();
@@ -18,6 +18,7 @@ public:
     ~Boid();
 
     void update();
+    void bound(int limBot, int limTop, int limLft, int limRgt);
     void draw(sf::RenderWindow& w);
 };
 

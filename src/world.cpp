@@ -30,6 +30,7 @@ World::~World() {
 void World::update() {
     for (int i = 0; i < numBoids; i++) {
         boids[i].update();
+        boids[i].bound(limBot, limTop, limLft, limRgt);
     }
 }
 

@@ -31,9 +31,26 @@ void Boid::update() {
     vel += acc;
 }
 
+/**
+ * Keep the boid within the bounds of the world by wrapping the boid's position
+ */
+void Boid::bound(int limBot, int limTop, int limLft, int limRgt) {
+    if (pos.x < limLft) {
+        pos.x += (float) (limRgt - limLft);
+    } else if (pos.x > limRgt) {
+        pos.x += (float) (limLft - limRgt);
+    }
+
+    if (pos.y < limBot) {
+        pos.y += (float) (limTop - limBot);
+    } else if (pos.y > limTop) {
+        pos.y += (float) (limBot - limTop);
+    }
+}
+
 void Boid::draw(sf::RenderWindow& w) {
-    sf::CircleShape vis(radius);
-    vis.setPosition(pos);
+    sf::CircleShape vis(RADIUS);
+    vis.setPosition(pos.x - RADIUS / 2, pos.y - RADIUS / 2);
     vis.setFillColor(sf::Color::Green);
     w.draw(vis);
 }
