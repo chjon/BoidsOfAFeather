@@ -6,10 +6,15 @@
 class Boid {
 private:
     const float RADIUS = 5;
+    const float VIEW_DIST = 10;
+    const float REQ_VEL = 0.1;
+    const float MAX_ACC = 0.01;
 
     sf::Vector2f pos;
     sf::Vector2f vel;
     sf::Vector2f acc;
+
+    sf::Vector2f alignment (std::vector<Boid>& candidateNeighbours, int numBoids);
 
 public:
     Boid();
@@ -17,7 +22,7 @@ public:
     Boid(sf::Vector2f pos, sf::Vector2f vel);
     ~Boid();
 
-    void update();
+    void update(std::vector<Boid>& candidateNeighbours, int numBoids);
     void bound(int limBot, int limTop, int limLft, int limRgt);
     void draw(sf::RenderWindow& w);
 };
