@@ -15,7 +15,7 @@
 					<Add option="-std=c++14" />
 					<Add option="-g" />
 					<Add option="-DSFML_STATIC" />
-					<Add directory="C:/Free Time/Programming/cpp/SFML-2.5.1/include" />
+					<Add directory="../SFML-2.5.1/include" />
 				</Compiler>
 				<Linker>
 					<Add library="sfml-graphics-s" />
@@ -25,7 +25,7 @@
 					<Add library="freetype" />
 					<Add library="winmm" />
 					<Add library="gdi32" />
-					<Add directory="C:/Free Time/Programming/cpp/SFML-2.5.1/lib" />
+					<Add directory="../SFML-2.5.1/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -47,6 +47,8 @@
 		<Unit filename="boid.cpp" />
 		<Unit filename="boid.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="world.cpp" />
+		<Unit filename="world.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
