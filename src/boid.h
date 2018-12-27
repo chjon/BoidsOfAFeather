@@ -5,13 +5,12 @@
 
 class Boid {
 private:
-    const float RADIUS = 5;
-    const float VIEW_DIST = 25;
-    const float REQ_VEL = 0.5;
-    const float MAX_ACC = 0.05;
+    const float VIEW_DIST = 50;
+    const float REQ_VEL = 2;
+    const float MAX_ACC = 0.1;
 
-    const float ALIGNMENT_WEIGHT  = 0.5;
-    const float COHESION_WEIGHT   = 0.35;
+    const float ALIGNMENT_WEIGHT  = 0.3;
+    const float COHESION_WEIGHT   = 0.3;
     const float SEPARATION_WEIGHT = 0.4;
 
     sf::Vector2f pos;
@@ -26,6 +25,7 @@ public:
     Boid(sf::Vector2f pos, sf::Vector2f vel);
     ~Boid();
 
+    inline sf::Vector2f getPos () { return pos; }
     void update(std::vector<Boid>& candidateNeighbours, int numBoids);
     void bound(int limBot, int limTop, int limLft, int limRgt);
     void draw(sf::RenderWindow& w);

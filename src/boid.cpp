@@ -74,9 +74,7 @@ void Boid::update(std::vector<Boid>& candidateNeighbours, int numBoids) {
     pos += vel;
     vel += acc;
 
-    // Normalize velocity
     vel = REQ_VEL * VectorUtil::normalize(vel);
-
     acc = MAX_ACC * VectorUtil::normalize(steer(candidateNeighbours, numBoids));
 }
 
@@ -101,9 +99,22 @@ void Boid::bound(int limBot, int limTop, int limLft, int limRgt) {
  * Draw the boid
  */
 void Boid::draw(sf::RenderWindow& w) {
-    sf::CircleShape b(RADIUS);
-    b.setOrigin(RADIUS / 2, RADIUS / 2);
+    sf::ConvexShape b;
+    b.setPointCount(3);
+    b.setPoint(0, sf::Vector2f(0.f, 5.f));
+    b.setPoint(1, sf::Vector2f(20.f, 0.f));
+    b.setPoint(2, sf::Vector2f(0.f, -5.f));
+
     b.setPosition(pos.x, pos.y);
+
+    // Draw the boid's acceleration vector
+    b.setRotation(VectorUtil::getAngleDegrees(acc));
+    b.setFillColor(sf::Color::Red);
+
+    w.draw(b);
+
+    // Draw the boid
+    b.setRotation(VectorUtil::getAngleDegrees(vel));
     b.setFillColor(sf::Color::Green);
 
     w.draw(b);

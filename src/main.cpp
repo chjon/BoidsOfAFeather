@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <vector>
+#include <ctime>
 #include "boid.h"
 #include "world.h"
 
@@ -11,13 +12,15 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Boids of a feather flock together", sf::Style::None);
 
-    srand(1);
+    srand(std::time(0));
 
     World world(0, HEIGHT - 1, 0, WIDTH - 1, NUM_BOIDS);
 
     // Manage main loop delay
     sf::Clock timer;
     sf::Time  delay = sf::seconds(0.01f);
+
+    window.setFramerateLimit(60);
 
     while (window.isOpen()) {
         // Check whether the window needs to be closed
@@ -30,8 +33,8 @@ int main() {
         // Update boids
         if (timer.getElapsedTime() >= delay) {
             window.clear();
-            world.update();
             world.draw(window);
+            world.update();
             window.display();
 
             timer.restart();

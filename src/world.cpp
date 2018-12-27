@@ -1,4 +1,5 @@
 #include "world.h"
+#include "vectorUtil.h"
 
 World::World(int limBot_, int limTop_, int limLft_, int limRgt_, int numBoids_) :
     limBot{limBot_},
