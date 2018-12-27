@@ -47,6 +47,7 @@
 		<Unit filename="src/boid.cpp" />
 		<Unit filename="src/boid.h" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/vectorUtil.h" />
 		<Unit filename="src/world.cpp" />
 		<Unit filename="src/world.h" />
 		<Extensions>

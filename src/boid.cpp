@@ -1,4 +1,5 @@
 #include "boid.h"
+#include "vectorUtil.h"
 
 Boid::Boid() :
     pos{sf::Vector2f(0, 0)},
@@ -26,31 +27,44 @@ Boid::~Boid() {
 
 }
 
-// Calculate the average velocity of neighbours
-sf::Vector2f Boid::alignment(std::vector<Boid>& candidateNeighbours, int numBoids) {
+sf::Vector2f Boid::steer(std::vector<Boid>& candidateNeighbours, int numBoids) {
     int numNeighbours = 0;
+
+    sf::Vector2f avgDis;
+    sf::Vector2f avgPos;
     sf::Vector2f avgVel;
 
+    // Calculate the average velocity of neighbours
     for (int i = 0; i < numBoids; i++) {
         // Boids cannot be their own neighbours
         if (&candidateNeighbours[i] == this) continue;
 
-        sf::Vector2f dist = candidateNeighbours[i].pos - pos;
-        float dist2 = dist.x * dist.x + dist.y + dist.y;
+        float dist2 = VectorUtil::mag2(candidateNeighbours[i].pos - pos);
 
         // Boids must be in visible range to be neighbours
         if (dist2 > VIEW_DIST * VIEW_DIST) continue;
 
+        avgDis += candidateNeighbours[i].pos - pos;
+        avgPos += candidateNeighbours[i].pos;
         avgVel += candidateNeighbours[i].vel;
         numNeighbours++;
     }
 
     if (numNeighbours > 0) {
+        avgPos.x /= numNeighbours;
+        avgPos.y /= numNeighbours;
+
         avgVel.x /= numNeighbours;
         avgVel.y /= numNeighbours;
+    } else {
+        avgPos = pos;
     }
 
-    return avgVel;
+    sf::Vector2f alignmentVel  = ALIGNMENT_WEIGHT  * VectorUtil::normalize(avgVel);
+    sf::Vector2f cohesionVel   = COHESION_WEIGHT   * VectorUtil::normalize(avgPos - pos);
+    sf::Vector2f separationVel = SEPARATION_WEIGHT * VectorUtil::normalize(-avgDis);
+
+    return alignmentVel + cohesionVel + separationVel;
 }
 
 /**
@@ -61,32 +75,9 @@ void Boid::update(std::vector<Boid>& candidateNeighbours, int numBoids) {
     vel += acc;
 
     // Normalize velocity
-    float velMag = vel.x * vel.x + vel.y * vel.y;
-    velMag = std::sqrt(velMag);
+    vel = REQ_VEL * VectorUtil::normalize(vel);
 
-    if (velMag != 0) {
-        vel.x /= velMag;
-        vel.y /= velMag;
-    }
-
-    sf::Vector2f desVel;
-
-    desVel += alignment(candidateNeighbours, numBoids);
-
-    acc.x = 0;
-    acc.y = 0;
-
-    if (desVel.x != 0 || desVel.y != 0) {
-        acc += desVel - vel;
-    }
-
-    // Normalize acceleration
-    float accMag = acc.x * acc.x + acc.y * acc.y;
-    if (accMag > MAX_ACC * MAX_ACC) {
-        accMag = std::sqrt(accMag);
-        acc.x *= MAX_ACC / accMag;
-        acc.y *= MAX_ACC / accMag;
-    }
+    acc = MAX_ACC * VectorUtil::normalize(steer(candidateNeighbours, numBoids));
 }
 
 /**
@@ -94,15 +85,15 @@ void Boid::update(std::vector<Boid>& candidateNeighbours, int numBoids) {
  */
 void Boid::bound(int limBot, int limTop, int limLft, int limRgt) {
     if (pos.x < limLft) {
-        pos.x += (float) (limRgt - limLft);
+        pos.x += limRgt - limLft;
     } else if (pos.x > limRgt) {
-        pos.x += (float) (limLft - limRgt);
+        pos.x += limLft - limRgt;
     }
 
     if (pos.y < limBot) {
-        pos.y += (float) (limTop - limBot);
+        pos.y += limTop - limBot;
     } else if (pos.y > limTop) {
-        pos.y += (float) (limBot - limTop);
+        pos.y += limBot - limTop;
     }
 }
 
@@ -110,8 +101,10 @@ void Boid::bound(int limBot, int limTop, int limLft, int limRgt) {
  * Draw the boid
  */
 void Boid::draw(sf::RenderWindow& w) {
-    sf::CircleShape vis(RADIUS);
-    vis.setPosition(pos.x - RADIUS / 2, pos.y - RADIUS / 2);
-    vis.setFillColor(sf::Color::Green);
-    w.draw(vis);
+    sf::CircleShape b(RADIUS);
+    b.setOrigin(RADIUS / 2, RADIUS / 2);
+    b.setPosition(pos.x, pos.y);
+    b.setFillColor(sf::Color::Green);
+
+    w.draw(b);
 }
