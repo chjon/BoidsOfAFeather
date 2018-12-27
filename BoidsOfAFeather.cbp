@@ -44,11 +44,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="boid.cpp" />
-		<Unit filename="boid.h" />
-		<Unit filename="main.cpp" />
-		<Unit filename="world.cpp" />
-		<Unit filename="world.h" />
+		<Unit filename="src/boid.cpp" />
+		<Unit filename="src/boid.h" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/world.cpp" />
+		<Unit filename="src/world.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
